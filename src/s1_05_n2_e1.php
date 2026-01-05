@@ -1,70 +1,51 @@
 <?php
 
-// --------------------------------------------------------------------
-// ---- Exercise 3: Calculate Area using Interface (aka Contracts) ----
-// --------------------------------------------------------------------
-// -------------------------  (Adding Circle) -------------------------
-//---------------------------------------------------------------------
+// ---------------------------------------------------------------
+// ---- Exercise: Extended Adding Circle and Calculating area ----
+//----------------------------------------------------------------
 
 declare(strict_types=1);
-
-//Interface defines the contract
-interface AreaToCalculate
+abstract class Shape 
 {
-    public function calculateArea(): float;
-}
-
-// Base class Shape
-class Shape 
-{
-    public float  $lenght;
-    public float  $width;
+    protected float  $width;
+    protected float  $height;
     
-    // Constructor of  length and width
-    public function __construct(float $lenght, float $width) {
-        $this->lenght  = $lenght;
-        $this->width  = $width;
-    }
-}
-
-//Child Classes (Triangle, Rectangle and + Circle) 
-
-class Triangle extends Shape implements AreaToCalculate {
-    // Method that calculate the area of a Triangle 
-    public function calculateArea(): float {
-        return ($this->width * $this->lenght) / 2;
+    // Constructor of length and width, as required. 
+    public function __construct(float $width, float $height) {
+        $this->width   = $width;
+        $this->height   = $height;
     }
 
-    public function name(): string {
+    abstract public function calculateArea(): float;
+        
+    public function getName(): string {
         return get_class($this);
     }
 }
 
-class Rectangle extends Shape implements AreaToCalculate {
-    // Method that calculate the area of a Rectangle 
+//=== Child Classes ===
+
+// Triangle: uses base and height
+class Triangle extends Shape{
     public function calculateArea(): float {
-        return $this->width * $this->lenght;
+        return ($this->width * $this->height) / 2;
     }
-     public function name(): string {
-        return get_class($this);
+}
+// Rectangle: uses width and height
+class Rectangle extends Shape {
+    public function calculateArea(): float {
+        return $this->width * $this->height;
     }
-    
 }
 
-// Child Classes (Circle) - only Implements Interface - since it's use different properties (radio vs width/lenght)
-class Circle implements AreaToCalculate {
-    public float $radius;
-    
+// Circle: uses radius (require adapt the constructor)
+class Circle extends Shape {
     public function __construct(float $radius) {
-        $this->radius = $radius;
+        parent::__construct($radius, $radius);
     }
     
     public function calculateArea(): float {
-        return pi() * ($this->radius ** 2);
-    }
-    
-    public function name(): string {
-        return get_class($this);
+        return pi() * ($this->width ** 2);
     }
 }
 
@@ -79,6 +60,7 @@ $shapes = [
 ];
 
 foreach ($shapes as $shape) {
-    echo $shape->name() . " Area :" . round($shape->calculateArea(),2) . "<br><br>";
+    echo $shape->getName() . " Area :" . $shape->calculateArea() . PHP_EOL;
 }
+
 ?>

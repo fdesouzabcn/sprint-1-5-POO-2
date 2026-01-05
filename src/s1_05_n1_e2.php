@@ -1,52 +1,40 @@
 <?php
 
-// --------------------------------------------------------------------
-// ---- Exercise 2: Calculate Area using Interface (aka Contracts) ----
-//---------------------------------------------------------------------
+// -----------------------------------------------------------
+// ---- Exercise 2: Calculate Area using Abstract classes ----
+//------------------------------------------------------------
 
 declare(strict_types=1);
-
-//Interface defines the contract
-interface AreaToCalculate
+abstract class Shape 
 {
-    public function calculateArea(): float;
-}
-
-// Base class Shape
-class Shape 
-{
-    public float  $lenght;
-    public float  $width;
+    protected float  $width;
+    protected float  $height;
     
-    // Constructor of  length and width
-    public function __construct(float $lenght, float $width) {
-        $this->lenght  = $lenght;
-        $this->width  = $width;
+    // Constructor of length and width, as required. 
+    public function __construct(float $width, float $height) {
+        $this->width   = $width;
+        $this->height   = $height;
+    }
+
+    abstract public function calculateArea(): float;
+        
+    public function getName(): string {
+        return get_class($this);
     }
 }
 
 //Child Classes (Triangle and Rectangle) 
-
-class Triangle extends Shape implements AreaToCalculate {
-    // Method that calculate the area of a Triangle 
+// Triangle: uses base and height
+class Triangle extends Shape{
     public function calculateArea(): float {
-        return ($this->width * $this->lenght) / 2;
-    }
-
-    public function name(): string {
-        return get_class($this);
+        return ($this->width * $this->height) / 2;
     }
 }
-
-class Rectangle extends Shape implements AreaToCalculate {
-    // Method that calculate the area of a Rectangle 
+// Rectangle: uses width and height
+class Rectangle extends Shape {
     public function calculateArea(): float {
-        return $this->width * $this->lenght;
+        return $this->width * $this->height;
     }
-     public function name(): string {
-        return get_class($this);
-    }
-    
 }
 
 //----------------------------
@@ -59,6 +47,6 @@ $shapes = [
 ];
 
 foreach ($shapes as $shape) {
-    echo $shape->name() . " Area :" . $shape->calculateArea() . "<br><br>";
+    echo $shape->getName() . " Area :" . $shape->calculateArea() . PHP_EOL;
 }
 ?>
